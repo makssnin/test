@@ -1,0 +1,22 @@
+openssl genrsa -out CA.key 4096
+openssl req -x509 -new -key CA.key -days 365 -out CA.crt
+ 
+openssl genrsa -out web-server.key 4096
+openssl req -new -key web-server.key -out web-server.csr -config cr.conf
+openssl x509 -req -in web-server.csr -CA CA.crt -CAkey CA.key -CAcreateserial -out web-server.crt -days 365 -extensions v3_req -extfile cr.conf
+
+
+
+
+
+
+
+
+openssl genrsa -out user.key 4096
+openssl req -new -key user.key -out user.csr
+openssl x509 -req -in user.csr -CA CA.crt -CAkey CA.key -CAcreateserial -out user.crt -days 365
+
+
+openssl genrsa -out web-server.key 4096
+openssl req -new -key web-server.key -out web-server.csr
+openssl x509 -req -in web-server.csr -CA CA.crt -CAkey CA.key -CAcreateserial -out web-server.crt -days 365
